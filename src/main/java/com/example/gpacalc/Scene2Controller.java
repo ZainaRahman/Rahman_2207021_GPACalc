@@ -39,6 +39,12 @@ public class Scene2Controller {
     @FXML
     private TextField CodeField;
     @FXML
+    private TextField requiredCreditField;
+    @FXML
+    private TextField teacherF1;
+    @FXML
+    private TextField teacherF2;
+    @FXML
     private Label resultLabel;
 
     private ObservableList<CourseDetails> courses = FXCollections.observableArrayList();
@@ -65,6 +71,25 @@ public class Scene2Controller {
         courseTable.setItems(courses);
 
         courseGrade.getItems().addAll(gradePoints.keySet());
+
+
+
+        courseGrade.setCellFactory(listView -> new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item);
+            }
+        });
+
+
+        courseGrade.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? null : item);
+            }
+        });
     }
 
     @FXML
@@ -73,6 +98,8 @@ public class Scene2Controller {
         String creditText = creditField.getText();
         String grade = courseGrade.getValue();
         String code =  CodeField.getText();
+        String teacher1= teacherF1.getText();
+        String teacher2=teacherF2.getText();
 
         if (name.isEmpty() || creditText.isEmpty() || grade == null) {
             showAlert("Please fill all fields!");
@@ -81,12 +108,14 @@ public class Scene2Controller {
 
         try {
             double credit = Double.parseDouble(creditText);
-            courses.add(new CourseDetails(name, credit, grade,code));
+            courses.add(new CourseDetails(name, credit, grade,code,teacher1,teacher2));
 
             nameField.clear();
             creditField.clear();
             courseGrade.setValue(null);
             CodeField.clear();
+            teacherF1.clear();
+            teacherF2.clear();
 
         } catch (Exception e) {
             showAlert("Invalid credit value!");
@@ -106,38 +135,58 @@ public class Scene2Controller {
 
     @FXML
     private void handleCalculate() {
-        if (courses.isEmpty()) {
-            showAlert("No courses added!");
+        if (requiredCreditField.getText().isEmpty()) {
+            showAlert("Please enter required total credit.");
             return;
         }
 
-        double totalCredits = 0;
-        double totalPoints = 0;
+        double requiredCredits = Double.parseDouble(requiredCreditField.getText());
 
-        for (CourseDetails c : courses) {
-            totalCredits += c.getCredit();
-            totalPoints += c.getCredit() * gradePoints.get(c.getGrade());
+        double currentCredits = courses.stream().mapToDouble(CourseDetails::getCredit).sum();
+
+        if (currentCredits != requiredCredits) {
+            showAlert("Total credits do not match!\nRequired: " + requiredCredits + " | Current: " + currentCredits);
+            return;
         }
 
-        double gpa = totalPoints / totalCredits;
+        double totalPoints = courses.stream()
+                .mapToDouble(c -> c.getCredit() * gradePoints.get(c.getGrade()))
+                .sum();
+
+        double gpa = totalPoints / requiredCredits;
+
         resultLabel.setText("GPA: " + String.format("%.2f", gpa));
+    }
+
+    @FXML
+    private void handleClear() {
+        courses.clear();
+        resultLabel.setText("");
     }
 
 
 
-    /*@FXML
-    private void goToAward(ActionEvent event) throws IOException {
+    @FXML
+    public void openAwardPage(ActionEvent event) throws IOException {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AwardScene.fxml"));
         Parent root = loader.load();
 
-        AwardController awardController = loader.getController();
-        awardController.setCourseData(courses);
-        awardController.setGPA(resultLabel.getText());
+        AwardController ac = loader.getController();
+
+        double totalCredit = courses.stream().mapToDouble(CourseDetails::getCredit).sum();
+
+        ac.loadData(
+                courses,
+                totalCredit,
+                resultLabel.getText()
+        );
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root, 600, 500));
+        stage.setScene(new Scene(root, 600, 800));
         stage.show();
-    }*/
+    }
+
 
 
 
