@@ -6,8 +6,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class AwardController {
-    @FXML
-    private VBox courseContainer;
+    @FXML private VBox courseContainer;
     @FXML
     private Label totalCreditLabel;
     @FXML
