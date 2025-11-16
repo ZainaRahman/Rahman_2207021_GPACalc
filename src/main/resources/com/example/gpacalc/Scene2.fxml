@@ -11,8 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox fx:id="courseTable" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="600.0" spacing="12.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpacalc.Scene2Controller">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="600.0" spacing="12.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpacalc.Scene2Controller">
    <children>
       <Label text="GPA Calculator">
          <font>
@@ -26,22 +25,22 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="courseName" alignment="CENTER" promptText="Course Name" />
+            <TextField fx:id="nameField" alignment="CENTER" promptText="Course Name" />
             <Label text="Credit">
                <padding>
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="courseCredit" alignment="CENTER" prefWidth="80.0" promptText="Credit" />
+            <TextField fx:id="creditField" alignment="CENTER" prefWidth="80.0" promptText="Credit" />
             <Label alignment="CENTER" contentDisplay="CENTER" text="Course Code">
                <padding>
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="courseCode" alignment="CENTER" prefHeight="25.0" prefWidth="97.0" promptText="Course Code" />
+            <TextField fx:id="CodeField" alignment="CENTER" prefHeight="25.0" prefWidth="97.0" promptText="Course Code" />
          </children>
       </HBox>
-      <HBox prefHeight="74.0" prefWidth="600.0">
+      <HBox prefHeight="45.0" prefWidth="600.0">
          <children>
             <Label text="Grade">
                <padding>
@@ -78,22 +77,24 @@
             </TextField>
          </children>
       </HBox>
-      <TableView editable="true" prefHeight="250.0" prefWidth="550.0">
+      <TableView fx:id="courseTable" editable="true" prefHeight="237.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="colName" prefWidth="250.0" text="Course" />
           <TableColumn fx:id="colCredit" prefWidth="100.0" text="Credit" />
             <TableColumn fx:id="colGrade" prefWidth="100.0" text="Grade" />
-            <TableColumn fx:id="colVerdict" prefWidth="140.0" text="Verdict" />
+            <TableColumn fx:id="colCode" prefWidth="140.0" text="CourseCode" />
         </columns>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="600.0" translateY="-10.0">
          <children>
             <HBox prefHeight="40.0" prefWidth="600.0" spacing="40.0" translateY="50.0">
                <children>
-                  <Button mnemonicParsing="false" text="Remove Selected" />
-                  <Button mnemonicParsing="false" text="Calculate GPA" />
-                  <Button mnemonicParsing="false" onAction="#switchToScene1" text="Back" />
-                  <Label text="Result Calculated">
+                  <Button mnemonicParsing="false" onAction="#DeleteSelected" text="Remove Selected" />
+                  <Button mnemonicParsing="false" onAction="#handleCalculate" prefHeight="25.0" prefWidth="113.0" text="Calculate GPA" translateX="-20.0" />
+                  <Button mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="75.0" text="Back" translateX="-30.0" />
+                  <Button mnemonicParsing="false" onAction="#Add" prefHeight="25.0" prefWidth="78.0" text="ADD" translateX="-30.0" />
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text=" Award Page" translateX="-20.0" />
+                  <Label fx:id="resultLabel" prefHeight="19.0" prefWidth="101.0" text="GPA" translateX="-20.0">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
