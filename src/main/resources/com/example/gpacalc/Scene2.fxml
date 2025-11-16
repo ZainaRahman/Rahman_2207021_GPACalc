@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="487.0" prefWidth="600.0" spacing="12.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpacalc.Scene2Controller">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="600.0" spacing="12.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpacalc.Scene2Controller">
    <children>
       <Label text="GPA Calculator">
          <font>
@@ -60,7 +60,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="teacher1" prefHeight="25.0" prefWidth="130.0" promptText="Enter Teacher1 Name">
+            <TextField fx:id="teacherF1" prefHeight="25.0" prefWidth="130.0" promptText="Enter Teacher1 Name">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -70,14 +70,38 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <TextField fx:id="teacher2" prefWidth="130.0" promptText="Enter Teacher2 Name">
+            <TextField fx:id="teacherF2" prefWidth="130.0" promptText="Enter Teacher2 Name">
                <HBox.margin>
-                  <Insets left="10.0" />
+                  <Insets left="10.0" right="2.0" />
                </HBox.margin>
             </TextField>
          </children>
       </HBox>
-      <TableView fx:id="courseTable" editable="true" prefHeight="237.0" prefWidth="600.0">
+      <HBox prefHeight="70.0" prefWidth="200.0">
+         <children>
+            <Label text="Total Credit">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="requiredCreditField" prefHeight="25.0" prefWidth="189.0" promptText="Enter the total credit of the term">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#Add" prefHeight="25.0" prefWidth="87.0" text="ADD INFO">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#handleClear" text="Clear All">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <TableView fx:id="courseTable" editable="true" prefHeight="300.0" prefWidth="600.0" translateY="20.0">
         <columns>
           <TableColumn fx:id="colName" prefWidth="250.0" text="Course" />
           <TableColumn fx:id="colCredit" prefWidth="100.0" text="Credit" />
@@ -86,25 +110,26 @@
         </columns>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="600.0" translateY="-10.0">
-         <children>
-            <HBox prefHeight="40.0" prefWidth="600.0" spacing="40.0" translateY="50.0">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#DeleteSelected" text="Remove Selected" />
-                  <Button mnemonicParsing="false" onAction="#handleCalculate" prefHeight="25.0" prefWidth="113.0" text="Calculate GPA" translateX="-20.0" />
-                  <Button mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="75.0" text="Back" translateX="-30.0" />
-                  <Button mnemonicParsing="false" onAction="#Add" prefHeight="25.0" prefWidth="78.0" text="ADD" translateX="-30.0" />
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text=" Award Page" translateX="-20.0" />
-                  <Label fx:id="resultLabel" prefHeight="19.0" prefWidth="101.0" text="GPA" translateX="-20.0">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
          <padding>
             <Insets top="-20.0" />
          </padding>
+      </HBox>
+      <HBox prefHeight="50.0" prefWidth="600.0" spacing="40.0" translateY="-40.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#DeleteSelected" prefHeight="25.0" prefWidth="139.0" text="Remove Selected">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#handleCalculate" prefHeight="25.0" prefWidth="115.0" text="Calculate GPA" />
+            <Button mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="82.0" text="Back" />
+            <Button mnemonicParsing="false" onAction="#openAwardPage" prefHeight="25.0" prefWidth="107.0" text=" Award Page" />
+            <Label fx:id="resultLabel" prefHeight="19.0" prefWidth="101.0" text="GPA" translateX="-20.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+         </children>
       </HBox>
    </children>
 </VBox>
