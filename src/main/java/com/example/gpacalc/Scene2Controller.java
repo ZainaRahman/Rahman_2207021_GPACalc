@@ -9,7 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -46,6 +49,12 @@ public class Scene2Controller {
     private TextField teacherF2;
     @FXML
     private String resultLabel;
+    @FXML
+    private Button gpaButton;
+    private double gpaValue;
+    private double requiredCredits;
+    private double currentCredits;
+
 
     private ObservableList<CourseDetails> courses = FXCollections.observableArrayList();
     private final Map<String, Double> gradePoints = new HashMap<>() {{
@@ -70,26 +79,37 @@ public class Scene2Controller {
 
         courseTable.setItems(courses);
 
+        courseTable.setEditable(true);
+        colName.setCellFactory(TextFieldTableCell.forTableColumn());
+        colCode.setCellFactory(TextFieldTableCell.forTableColumn());
+        colGrade.setCellFactory(TextFieldTableCell.forTableColumn());
+        colCredit.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+
+
         courseGrade.getItems().addAll(gradePoints.keySet());
 
-
-
-        courseGrade.setCellFactory(listView -> new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty ? null : item);
-            }
+        colName.setOnEditCommit(event -> {
+            CourseDetails c = event.getRowValue();
+            c.setName(event.getNewValue());
         });
 
-
-        courseGrade.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty ? null : item);
-            }
+        colCode.setOnEditCommit(event -> {
+            CourseDetails c = event.getRowValue();
+            c.setCode(event.getNewValue());
         });
+
+        colGrade.setOnEditCommit(event -> {
+            CourseDetails c = event.getRowValue();
+            c.setGrade(event.getNewValue());
+        });
+
+        colCredit.setOnEditCommit(event -> {
+            CourseDetails c = event.getRowValue();
+            c.setCredit(event.getNewValue());
+        });
+        requiredCreditField.textProperty().addListener((obs, oldVal, newVal) -> check());
+
+
     }
 
     @FXML
@@ -116,11 +136,43 @@ public class Scene2Controller {
             CodeField.clear();
             teacherF1.clear();
             teacherF2.clear();
+            check();
 
         } catch (Exception e) {
             showAlert("Invalid credit value!");
         }
+
     }
+
+    @FXML
+    private void editSelected() {
+        CourseDetails selected = courseTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("No row selected!");
+            return;
+        }
+
+        TextInputDialog dialog = new TextInputDialog(selected.getTeacher1());
+        dialog.setHeaderText("Edit teacher1: " + selected.getTeacher1());
+        dialog.setContentText("Enter new teacher1 name:");
+
+        dialog.showAndWait().ifPresent(newTeacher1 -> {
+            selected.setTeacher1(newTeacher1);
+
+        });
+
+        TextInputDialog dialog1 = new TextInputDialog(selected.getTeacher2());
+        dialog1.setHeaderText("Edit teacher2: " + selected.getTeacher2());
+        dialog1.setContentText("Enter new teacher2 name:");
+
+        dialog1.showAndWait().ifPresent(newTeacher2 -> {
+            selected.setTeacher2(newTeacher2);
+
+        });
+
+
+    }
+
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText(msg);
@@ -133,19 +185,32 @@ public class Scene2Controller {
         if (selected != null) courses.remove(selected);
     }
 
-    @FXML
-    private void handleCalculate() {
-        if (requiredCreditField.getText().isEmpty()) {
-            showAlert("Please enter required total credit.");
+    private void check(){
+        try {
+            requiredCredits = Double.parseDouble(requiredCreditField.getText());
+        } catch (NumberFormatException e) {
+            gpaButton.setDisable(true);
             return;
         }
 
-        double requiredCredits = Double.parseDouble(requiredCreditField.getText());
+        currentCredits = courses.stream().mapToDouble(CourseDetails::getCredit).sum();
+        gpaButton.setDisable(currentCredits != requiredCredits);
+    }
 
-        double currentCredits = courses.stream().mapToDouble(CourseDetails::getCredit).sum();
+
+
+
+    private void handleCalculate() {
+        if (requiredCreditField.getText().isEmpty()) {
+            showAlert("Please enter required total credit.");
+
+            return;
+        }
+
 
         if (currentCredits != requiredCredits) {
             showAlert("Total credits do not match!\nRequired: " + requiredCredits + " | Current: " + currentCredits);
+
             return;
         }
 
@@ -153,10 +218,10 @@ public class Scene2Controller {
                 .mapToDouble(c -> c.getCredit() * gradePoints.get(c.getGrade()))
                 .sum();
 
-        double gpa = totalPoints / requiredCredits;
+        gpaValue = totalPoints / requiredCredits;
 
-        resultLabel=  Double.toString(gpa);
     }
+
 
     @FXML
     private void handleClear() {
@@ -180,7 +245,7 @@ public class Scene2Controller {
         ac.loadData(
                 courses,
                 totalCredit,
-                resultLabel
+                String.valueOf(gpaValue)
         );
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
