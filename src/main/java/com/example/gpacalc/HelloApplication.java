@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
         Parent root=loader.load();
         Scene scene = new Scene(root, 320, 240);
         stage.setResizable(false);
-        stage.setWidth(600);
+        stage.setWidth(650);
         stage.setHeight(600);
         stage.setTitle("Home Page");
         stage.setScene(scene);
