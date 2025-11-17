@@ -42,12 +42,12 @@
       </HBox>
       <HBox prefHeight="45.0" prefWidth="600.0">
          <children>
-            <Label text="Grade">
+            <Label prefHeight="17.0" prefWidth="58.0" text="Grade">
                <padding>
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <ComboBox fx:id="courseGrade" prefWidth="50.0">
+            <ComboBox fx:id="courseGrade" prefHeight="25.0" prefWidth="47.0">
                <padding>
                   <Insets left="20.0" />
                </padding>
@@ -121,7 +121,8 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#openAwardPage" prefHeight="25.0" prefWidth="115.0" text="Calculate GPA" />
+            <Button fx:id="gpaButton" mnemonicParsing="false" onAction="#openAwardPage" prefHeight="25.0" prefWidth="115.0" text="Calculate GPA" />
+            <Button mnemonicParsing="false" onAction="#editSelected" text="Edit Selected" />
             <Button mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="82.0" text="Back" />
          </children>
       </HBox>
