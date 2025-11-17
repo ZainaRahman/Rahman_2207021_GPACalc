@@ -1,7 +1,6 @@
 package com.example.gpacalc;
 
 import javafx.beans.property.*;
-import javafx.scene.control.TextField;
 
 public class CourseDetails {
     private final StringProperty name;
@@ -44,6 +43,26 @@ public class CourseDetails {
         return teacher2.get();
     }
 
+    public void setName(String newValue) {
+        this.name.set(newValue);
+
+    }
+    public void setCredit(Double newValue) {
+        this.credit.set(newValue);
+    }
+    public void setGrade(String newValue) {
+        this.grade.set(newValue);
+    }
+    public void setCode(String newValue) {
+        this.code.set(newValue);
+    }
+    public void setTeacher1(String newValue) {
+        this.teacher1.set(newValue);
+    }
+    public void setTeacher2(String newValue){
+        this.teacher2.set(newValue);
+    }
+
 
 
     public StringProperty nameProperty() {
@@ -58,12 +77,12 @@ public class CourseDetails {
     public StringProperty codeProperty() {
         return code;
     }
-    public StringProperty T1Property() {
+    /*public StringProperty T1Property() {
         return teacher1;
     }
     public StringProperty T2Property() {
         return teacher2;
-    }
+    }*/
 
 }
 
