@@ -45,7 +45,7 @@ public class Scene2Controller {
     @FXML
     private TextField teacherF2;
     @FXML
-    private Label resultLabel;
+    private String resultLabel;
 
     private ObservableList<CourseDetails> courses = FXCollections.observableArrayList();
     private final Map<String, Double> gradePoints = new HashMap<>() {{
@@ -155,13 +155,13 @@ public class Scene2Controller {
 
         double gpa = totalPoints / requiredCredits;
 
-        resultLabel.setText("GPA: " + String.format("%.2f", gpa));
+        resultLabel=  Double.toString(gpa);
     }
 
     @FXML
     private void handleClear() {
         courses.clear();
-        resultLabel.setText("");
+
     }
 
 
@@ -169,6 +169,7 @@ public class Scene2Controller {
     @FXML
     public void openAwardPage(ActionEvent event) throws IOException {
 
+        handleCalculate();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AwardScene.fxml"));
         Parent root = loader.load();
 
@@ -179,7 +180,7 @@ public class Scene2Controller {
         ac.loadData(
                 courses,
                 totalCredit,
-                resultLabel.getText()
+                resultLabel
         );
 
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
