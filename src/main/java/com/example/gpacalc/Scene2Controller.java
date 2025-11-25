@@ -1,5 +1,7 @@
 package com.example.gpacalc;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
@@ -51,9 +54,13 @@ public class Scene2Controller {
     private String resultLabel;
     @FXML
     private Button gpaButton;
+    @FXML
+    private Text counting;
+
     private double gpaValue;
     private double requiredCredits;
     private double currentCredits;
+    private int counter=0;
 
 
     private ObservableList<CourseDetails> courses = FXCollections.observableArrayList();
@@ -108,6 +115,10 @@ public class Scene2Controller {
             c.setCredit(event.getNewValue());
         });
         requiredCreditField.textProperty().addListener((obs, oldVal, newVal) -> check());
+        courses.addListener((Observable observable) -> {
+            counter = courses.size();
+            counting.setText(String.valueOf(counter));
+        });
 
 
     }
@@ -126,6 +137,8 @@ public class Scene2Controller {
             return;
         }
 
+
+
         try {
             double credit = Double.parseDouble(creditText);
             courses.add(new CourseDetails(name, credit, grade,code,teacher1,teacher2));
@@ -141,6 +154,8 @@ public class Scene2Controller {
         } catch (Exception e) {
             showAlert("Invalid credit value!");
         }
+
+
 
     }
 
