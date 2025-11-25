@@ -12,6 +12,7 @@ module com.example.gpacalc {
     requires com.almasb.fxgl.all;
     requires javafx.graphics;
     requires javafx.base;
+    requires java.sql;
 
     opens com.example.gpacalc to javafx.fxml;
     exports com.example.gpacalc;
