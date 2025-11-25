@@ -107,10 +107,10 @@
           <TableColumn fx:id="colName" prefWidth="250.0" text="Course" />
           <TableColumn fx:id="colCredit" prefWidth="100.0" text="Credit" />
             <TableColumn fx:id="colGrade" prefWidth="100.0" text="Grade" />
-            <TableColumn fx:id="colCode" prefWidth="140.0" text="CourseCode" />
+            <TableColumn fx:id="colCode" prefWidth="148.66668701171875" text="CourseCode" />
         </columns>
       </TableView>
-      <HBox prefHeight="60.0" prefWidth="600.0" translateY="-10.0">
+      <HBox prefHeight="85.0" prefWidth="600.0" translateY="20.0">
          <padding>
             <Insets top="-20.0" />
          </padding>
@@ -140,7 +140,7 @@
                   <Font name="System Bold" size="17.0" />
                </font>
             </Label>
-            <Text fx:id="counting" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="16.13671875">
+            <Text fx:id="counting" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="38.80334663391113">
                <font>
                   <Font size="17.0" />
                </font>
