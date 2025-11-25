@@ -19,7 +19,8 @@ public class AwardController {
             String calculatedGPA
     ) {
         totalCreditLabel.setText(String.valueOf(totalCredit));
-        totalGPALabel.setText(calculatedGPA);
+        double gpa = Double.parseDouble(calculatedGPA);
+        totalGPALabel.setText(String.format("%.2f", gpa));
 
         courseContainer.getChildren().clear();
 
