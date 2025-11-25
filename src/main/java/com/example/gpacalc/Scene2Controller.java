@@ -18,7 +18,9 @@ import javafx.util.StringConverter;
 import javafx.util.converter.DoubleStringConverter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Scene2Controller {
@@ -26,15 +28,15 @@ public class Scene2Controller {
     private Scene scene;
 
     @FXML
-    private TableView<CourseDetails> courseTable;
+    private TableView<CourseDetailsWithID> courseTable;
     @FXML
-    private TableColumn<CourseDetails, String> colName;
+    private TableColumn<CourseDetailsWithID, String> colName;
     @FXML
-    private TableColumn<CourseDetails, Double> colCredit;
+    private TableColumn<CourseDetailsWithID, Double> colCredit;
     @FXML
-    private TableColumn<CourseDetails, String> colGrade;
+    private TableColumn<CourseDetailsWithID, String> colGrade;
     @FXML
-    private TableColumn<CourseDetails, String> colCode;
+    private TableColumn<CourseDetailsWithID, String> colCode;
 
     @FXML
     private TextField nameField;
@@ -61,9 +63,10 @@ public class Scene2Controller {
     private double requiredCredits;
     private double currentCredits;
     private int counter=0;
+    private final CourseDB courseDB = new CourseDB();
 
 
-    private ObservableList<CourseDetails> courses = FXCollections.observableArrayList();
+    private ObservableList<CourseDetailsWithID> courses = FXCollections.observableArrayList();
     private final Map<String, Double> gradePoints = new HashMap<>() {{
         put("A+", 4.0);
         put("A", 3.75);
@@ -95,30 +98,16 @@ public class Scene2Controller {
 
         courseGrade.getItems().addAll(gradePoints.keySet());
 
-        colName.setOnEditCommit(event -> {
-            CourseDetails c = event.getRowValue();
-            c.setName(event.getNewValue());
-        });
 
-        colCode.setOnEditCommit(event -> {
-            CourseDetails c = event.getRowValue();
-            c.setCode(event.getNewValue());
-        });
-
-        colGrade.setOnEditCommit(event -> {
-            CourseDetails c = event.getRowValue();
-            c.setGrade(event.getNewValue());
-        });
-
-        colCredit.setOnEditCommit(event -> {
-            CourseDetails c = event.getRowValue();
-            c.setCredit(event.getNewValue());
-        });
         requiredCreditField.textProperty().addListener((obs, oldVal, newVal) -> check());
         courses.addListener((Observable observable) -> {
             counter = courses.size();
             counting.setText(String.valueOf(counter));
         });
+        List<CourseDetailsWithID> dbCourses = courseDB.getAllCourses();
+        //courses.addAll(dbCourses);
+
+
 
 
     }
@@ -141,7 +130,9 @@ public class Scene2Controller {
 
         try {
             double credit = Double.parseDouble(creditText);
-            courses.add(new CourseDetails(name, credit, grade,code,teacher1,teacher2));
+            CourseDetailsWithID course = new CourseDetailsWithID(0, name, credit, grade, code, teacher1, teacher2);
+            courses.add(course);
+            courseDB.insertCourse(course);
 
             nameField.clear();
             creditField.clear();
@@ -161,11 +152,43 @@ public class Scene2Controller {
 
     @FXML
     private void editSelected() {
-        CourseDetails selected = courseTable.getSelectionModel().getSelectedItem();
+        CourseDetailsWithID selected = (CourseDetailsWithID) courseTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("No row selected!");
             return;
         }
+
+        TextInputDialog nameDialog = new TextInputDialog(selected.getName());
+        nameDialog.setHeaderText("Edit Course Name");
+        nameDialog.setContentText("Enter new course name:");
+        nameDialog.showAndWait().ifPresent(newName -> selected.setName(newName));
+
+
+        TextInputDialog codeDialog = new TextInputDialog(selected.getCode());
+        codeDialog.setHeaderText("Edit Course Code");
+        codeDialog.setContentText("Enter new course code:");
+        codeDialog.showAndWait().ifPresent(newCode -> selected.setCode(newCode));
+
+
+        TextInputDialog gradeDialog = new TextInputDialog(selected.getGrade());
+        gradeDialog.setHeaderText("Edit Course Grade");
+        gradeDialog.setContentText("Enter new grade (A+, A, A-, ...):");
+        gradeDialog.showAndWait().ifPresent(newGrade -> selected.setGrade(newGrade));
+
+
+        TextInputDialog creditDialog = new TextInputDialog(String.valueOf(selected.getCredit()));
+        creditDialog.setHeaderText("Edit Course Credit");
+        creditDialog.setContentText("Enter new credit:");
+        creditDialog.showAndWait().ifPresent(newCreditStr -> {
+            try {
+                double oldCredit = selected.getCredit();
+                double newCredit = Double.parseDouble(newCreditStr);
+                selected.setCredit(newCredit);
+                currentCredits += (newCredit - oldCredit);
+            } catch (NumberFormatException e) {
+                showAlert("Invalid credit value!");
+            }
+        });
 
         TextInputDialog dialog = new TextInputDialog(selected.getTeacher1());
         dialog.setHeaderText("Edit teacher1: " + selected.getTeacher1());
@@ -184,6 +207,7 @@ public class Scene2Controller {
             selected.setTeacher2(newTeacher2);
 
         });
+        courseDB.updateCourse(selected.getId(), selected);
 
 
     }
@@ -194,11 +218,25 @@ public class Scene2Controller {
         alert.show();
     }
 
+    private void r(){
+
+    }
+
     @FXML
     private void DeleteSelected() {
-        CourseDetails selected = courseTable.getSelectionModel().getSelectedItem();
-        if (selected != null) courses.remove(selected);
-    }
+        CourseDetailsWithID selected = (CourseDetailsWithID) courseTable.getSelectionModel().getSelectedItem();
+
+        if (selected != null) {
+            double removedCredit = selected.getCredit();
+
+            courses.remove(selected);
+            courseDB.deleteCourse(selected.getId());
+
+            currentCredits -= removedCredit;
+            check();
+        }
+        }
+
 
     private void check(){
         try {
@@ -258,7 +296,7 @@ public class Scene2Controller {
         double totalCredit = courses.stream().mapToDouble(CourseDetails::getCredit).sum();
 
         ac.loadData(
-                courses,
+                new ArrayList<>(courses),
                 totalCredit,
                 String.valueOf(gpaValue)
         );
