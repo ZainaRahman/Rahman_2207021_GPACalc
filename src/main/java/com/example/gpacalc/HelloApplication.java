@@ -14,7 +14,6 @@ public class HelloApplication extends Application {
         FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Parent root=loader.load();
         Scene scene = new Scene(root, 320, 240);
-        stage.setResizable(false);
         stage.setWidth(650);
         stage.setHeight(600);
         stage.setTitle("Home Page");
