@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="600.0" spacing="12.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gpacalc.Scene2Controller">
    <children>
@@ -101,7 +102,7 @@
             </Button>
          </children>
       </HBox>
-      <TableView fx:id="courseTable" editable="true" prefHeight="300.0" prefWidth="600.0" translateY="20.0">
+      <TableView fx:id="courseTable" editable="true" prefHeight="275.0" prefWidth="600.0" translateY="20.0">
         <columns>
           <TableColumn fx:id="colName" prefWidth="250.0" text="Course" />
           <TableColumn fx:id="colCredit" prefWidth="100.0" text="Credit" />
@@ -109,12 +110,12 @@
             <TableColumn fx:id="colCode" prefWidth="140.0" text="CourseCode" />
         </columns>
       </TableView>
-      <HBox prefHeight="100.0" prefWidth="600.0" translateY="-10.0">
+      <HBox prefHeight="60.0" prefWidth="600.0" translateY="-10.0">
          <padding>
             <Insets top="-20.0" />
          </padding>
       </HBox>
-      <HBox prefHeight="50.0" prefWidth="600.0" spacing="40.0" translateY="-40.0">
+      <HBox prefHeight="26.0" prefWidth="600.0" spacing="40.0" translateY="-40.0">
          <children>
             <Button mnemonicParsing="false" onAction="#DeleteSelected" prefHeight="25.0" prefWidth="139.0" text="Remove Selected">
                <HBox.margin>
@@ -124,6 +125,26 @@
             <Button fx:id="gpaButton" mnemonicParsing="false" onAction="#openAwardPage" prefHeight="25.0" prefWidth="115.0" text="Calculate GPA" />
             <Button mnemonicParsing="false" onAction="#editSelected" text="Edit Selected" />
             <Button mnemonicParsing="false" onAction="#switchToScene1" prefHeight="25.0" prefWidth="82.0" text="Back" />
+         </children>
+      </HBox>
+      <HBox prefHeight="65.0" prefWidth="600.0" translateY="-15.0">
+         <children>
+            <Label prefHeight="26.0" prefWidth="183.0" text="Total courses added">
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="17.0" />
+               </font>
+            </Label>
+            <Text fx:id="counting" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="16.13671875">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Text>
          </children>
       </HBox>
    </children>
