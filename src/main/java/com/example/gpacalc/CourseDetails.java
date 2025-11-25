@@ -77,6 +77,8 @@ public class CourseDetails {
     public StringProperty codeProperty() {
         return code;
     }
+
+
     /*public StringProperty T1Property() {
         return teacher1;
     }
