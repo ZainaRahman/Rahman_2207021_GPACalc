@@ -38,6 +38,7 @@ public class HelloController implements Initializable {
         Parent root = loader.load();
         stage=(Stage)((Node)event.getSource()).getScene().getWindow();
         scene=new Scene(root);
+        stage.setResizable(false);
         stage.setTitle("Calculator!!");
         stage.setScene(scene);
         stage.show();
